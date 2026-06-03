@@ -4,30 +4,11 @@ import { getCategory } from "../data/catalog";
 import ProductDetail from "../components/ProductDetail";
 import LazyImage from "../components/LazyImage";
 
-/**
- * BakeryPage — the showcase page.
- *
- * Layout concept: "Digital Museum for Bread"
- * ---------------------------------------------------------------
- *  1. PARALLAX HERO — full-bleed crust macro behind a quiet,
- *     oversized serif title. The image scales + drifts on scroll;
- *     the text fades up. No CTA buttons fighting for attention.
- *
- *  2. THE STORY OF GRAIN — a thin editorial section: a single
- *     photograph of a wheat field, an italic pull-quote, and a
- *     short paragraph. This is the "wall text" of our museum.
- *
- *  3. PROCESS LEDGER — three small glass cards: Mill · Ferment ·
- *     Bake. Each is a step, not a product. Establishes craft.
- *
- *  4. THE COLLECTION — a sequence of full-width ProductDetail
- *     panels (alternating left/right) for each loaf. These are
- *     the "exhibits". Generous whitespace between them so the eye
- *     can rest, like walking through a gallery.
- *
- *  5. CLOSING NOTE — a small italic dedication, no CTA.
- */
-export default function BakeryPage() {
+type Props = {
+  onNavigate: (route: string) => void;
+};
+
+export default function BakeryPage({ onNavigate }: Props) {
   const cat = getCategory("bakery")!;
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -58,35 +39,37 @@ export default function BakeryPage() {
             decoding="async"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-cream-soft/30 via-transparent to-cream-soft" />
+          {/* Luxurious cinematic scrim */}
+          <div className="hero-scrim" />
+          {/* Soft bottom fade to page background */}
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-cream-soft to-transparent pointer-events-none" />
         </motion.div>
 
         <motion.div
           style={{ y: titleY, opacity: titleOpacity }}
           className="relative z-10 h-full flex flex-col justify-end pb-20 sm:pb-28 px-6 sm:px-12 max-w-7xl mx-auto"
         >
-          <p className="text-[11px] uppercase tracking-[0.4em] text-ink/60 mb-4">
+          <p className="text-[11px] uppercase tracking-[0.4em] text-cream/70 mb-4 text-shadow-lux-soft">
             Department 01 · Bakery
           </p>
-          <h1 className="font-display text-[18vw] sm:text-[14vw] md:text-[10rem] leading-[0.85] tracking-tight text-ink">
+          <h1 className="font-display text-[18vw] sm:text-[14vw] md:text-[10rem] leading-[0.85] tracking-tight text-cream text-shadow-lux-display">
             Of grain,
             <br />
             <span className="italic font-light">fire</span> &amp; patience.
           </h1>
-          <p className="mt-8 max-w-md text-ink/70 text-base sm:text-lg leading-relaxed">
+          <p className="mt-8 max-w-md text-cream/80 text-base sm:text-lg leading-relaxed font-light text-shadow-lux-soft">
             {cat.intro}
           </p>
         </motion.div>
 
-        {/* Scroll cue */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 1 }}
-          className="absolute bottom-6 right-6 sm:right-12 text-ink/50 text-xs uppercase tracking-[0.3em]"
+          className="absolute bottom-6 right-6 sm:right-12 text-cream/60 text-xs uppercase tracking-[0.3em] text-shadow-lux-soft"
         >
           <span className="block">Scroll</span>
-          <span className="block w-px h-10 bg-ink/30 mt-2 ml-3 origin-top animate-pulse" />
+          <span className="block w-px h-10 bg-cream/40 mt-2 ml-3 origin-top animate-pulse" />
         </motion.div>
       </section>
 
@@ -105,8 +88,8 @@ export default function BakeryPage() {
             <p className="text-ink/70 leading-relaxed text-lg font-light">
               We trace each grain back to the farm — heritage wheats grown on
               soil that's been tended for generations, milled slowly between
-              cool stones to keep the germ alive. What you taste, in the end,
-              is weather and patience.
+              cool stones to keep the germ alive. What you taste, in the end, is
+              weather and patience.
             </p>
           </div>
           <div className="md:col-span-7">
@@ -131,20 +114,17 @@ export default function BakeryPage() {
               {
                 n: "I",
                 title: "Mill",
-                body:
-                  "Stone-ground within hours of baking. The flour stays cool, the germ stays whole, the flavour stays alive.",
+                body: "Stone-ground within hours of baking. The flour stays cool, the germ stays whole, the flavour stays alive.",
               },
               {
                 n: "II",
                 title: "Ferment",
-                body:
-                  "A slow, wild rise — sometimes overnight, sometimes a day and a half. We wait until the dough is ready, never the other way around.",
+                body: "A slow, wild rise — sometimes overnight, sometimes a day and a half. We wait until the dough is ready, never the other way around.",
               },
               {
                 n: "III",
                 title: "Bake",
-                body:
-                  "Stone hearth, real fire, deep heat. The crust forms in a roar of steam; the inside settles into something tender.",
+                body: "Stone hearth, real fire, deep heat. The crust forms in a roar of steam; the inside settles into something tender.",
               },
             ].map((s, i) => (
               <motion.div
@@ -180,7 +160,12 @@ export default function BakeryPage() {
         </div>
 
         {cat.items.map((item, i) => (
-          <ProductDetail key={item.id} item={item} index={i} />
+          <ProductDetail
+            key={item.id}
+            item={item}
+            index={i}
+            onNavigate={onNavigate}
+          />
         ))}
       </section>
 

@@ -132,7 +132,7 @@ export default function HomePage({ onNavigate }: Props) {
                   rounded="rounded-3xl"
                   className="transition-transform duration-700 group-hover:scale-[1.02]"
                 />
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-t from-ink/75 via-ink/20 to-ink/5" />
 
                 <div className="absolute top-4 left-4 glass rounded-full px-3 py-1">
                   <span className="text-[10px] uppercase tracking-[0.25em] text-ink/80">
@@ -141,10 +141,10 @@ export default function HomePage({ onNavigate }: Props) {
                 </div>
 
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="font-display text-3xl text-cream mb-1">
+                  <h3 className="font-display text-3xl text-cream mb-1 text-shadow-lux">
                     {c.title}
                   </h3>
-                  <p className="text-cream/75 italic text-sm">{c.tagline}</p>
+                  <p className="text-cream/75 italic text-sm text-shadow-lux-soft">{c.tagline}</p>
                   <div className="mt-4 inline-flex items-center gap-2 text-cream/90 text-xs uppercase tracking-[0.25em]">
                     Enter
                     <span className="transition-transform group-hover:translate-x-1">

@@ -5,31 +5,26 @@ import PageTransition from "./components/PageTransition";
 import HomePage from "./pages/HomePage";
 import BakeryPage from "./pages/BakeryPage";
 import CategoryPage from "./pages/CategoryPage";
+import StorePage from "./pages/StorePage";
 import { getCategory } from "./data/catalog";
 
 /**
  * App
- * --------------------------------------------------------------------
- * Lightweight in-memory router (no react-router needed for a 6-page
- * concept site). Routes are: "home" | "bakery" | "meat-cheese" |
- * "daily-deals" | "veggies" | "fruits" | "others".
- *
- * Page transitions:
- *  - AnimatePresence with mode="wait" so pages don't overlap.
- *  - Each page wraps in <PageTransition> which fades + lifts in 350ms.
- *  - Window scrolls to top on every route change.
- *  - The Navigation persists across routes (no remount, no flicker).
+ * ---------------------------------------------------------------
+ * In-memory router. Routes:
+ *   "home" | "store" | "bakery" | "vegetables-fruits" | "meat" |
+ *   "fromagerie-charcuterie" | "spices" | "nuts" | "household" |
+ *   "groceries" | "alcoholic-beverages" | "non-alcoholic-beverages" |
+ *   "salads-appetizers" | "fresh-juices" | "daily-deals"
  */
 export default function App() {
   const [route, setRoute] = useState<string>("home");
 
   const navigate = (next: string) => {
     setRoute(next);
-    // Defer scroll to next frame so the transition starts smoothly
     requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
   };
 
-  // Sync with hash so deep links / back button work nicely
   useEffect(() => {
     const sync = () => {
       const h = window.location.hash.replace("#/", "").replace("#", "");
@@ -55,10 +50,17 @@ export default function App() {
         </PageTransition>
       );
     }
+    if (route === "store") {
+      return (
+        <PageTransition key="store">
+          <StorePage />
+        </PageTransition>
+      );
+    }
     if (route === "bakery") {
       return (
         <PageTransition key="bakery">
-          <BakeryPage />
+          <BakeryPage onNavigate={navigate} />
         </PageTransition>
       );
     }
@@ -66,11 +68,10 @@ export default function App() {
     if (cat) {
       return (
         <PageTransition key={cat.slug}>
-          <CategoryPage category={cat} />
+          <CategoryPage category={cat} onNavigate={navigate} />
         </PageTransition>
       );
     }
-    // Fallback to home
     return (
       <PageTransition key="home-fallback">
         <HomePage onNavigate={navigate} />

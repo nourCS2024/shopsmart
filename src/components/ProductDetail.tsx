@@ -5,30 +5,23 @@ import type { CatalogItem } from "../data/catalog";
 
 type Props = {
   item: CatalogItem;
-  index?: number; // alternates layout direction
+  index?: number;
+  onNavigate?: (route: string) => void;
 };
 
 /**
  * ProductDetail
  * --------------------------------------------------------------------
- * A "museum plaque" style component for a single item.
- *
- *  - Large editorial imagery on one side (with subtle parallax).
- *  - Generous whitespace + serif display type on the other.
- *  - Tasting notes rendered as quiet, individual lines.
- *  - Strictly NO PRICES — replaced by an "Origin" line and a soft CTA
- *    that says "Add to list" rather than "Buy".
- *
- * Mobile-first: stacks vertically by default; switches to side-by-side
- * grid at md+. The image always leads on mobile (visual anchor).
+ * Museum-plaque style component for a single catalog item.
+ * "Add to my list" button removed.
+ * "Find in store" now navigates to the StorePage via onNavigate.
  */
-export default function ProductDetail({ item, index = 0 }: Props) {
+export default function ProductDetail({ item, index = 0, onNavigate }: Props) {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
-  // Subtle parallax — image rises slightly faster than text
   const imageY = useTransform(scrollYProgress, [0, 1], ["6%", "-6%"]);
 
   const reverse = index % 2 === 1;
@@ -62,7 +55,6 @@ export default function ProductDetail({ item, index = 0 }: Props) {
               className="shadow-[0_30px_80px_-30px_rgba(26,23,20,0.45)]"
             />
 
-            {/* Floating glass badge */}
             {item.badge && (
               <div className="absolute top-5 left-5 glass rounded-full px-4 py-1.5">
                 <span className="text-[11px] uppercase tracking-[0.22em] text-ink/80">
@@ -71,7 +63,6 @@ export default function ProductDetail({ item, index = 0 }: Props) {
               </div>
             )}
 
-            {/* Decorative number plaque — museum style */}
             <div className="absolute -bottom-6 right-6 sm:-bottom-8 sm:right-10">
               <div className="glass rounded-2xl px-5 py-3 flex items-baseline gap-2">
                 <span className="font-display text-[10px] uppercase tracking-[0.25em] text-ink/50">
@@ -163,22 +154,17 @@ export default function ProductDetail({ item, index = 0 }: Props) {
             </div>
           )}
 
-          {/* Soft CTA — no prices, no "buy" */}
-          <div className="pt-6 flex items-center gap-4">
+          {/* Single CTA — Find in Store */}
+          <div className="pt-6">
             <button
               type="button"
+              onClick={() => onNavigate?.("store")}
               className="group inline-flex items-center gap-3 rounded-full bg-ink text-cream px-6 py-3.5 text-sm tracking-wide hover:bg-clay transition-colors"
             >
-              Add to my list
+              Find in store
               <span className="transition-transform group-hover:translate-x-1">
                 →
               </span>
-            </button>
-            <button
-              type="button"
-              className="text-sm text-ink/60 hover:text-ink underline-offset-4 hover:underline"
-            >
-              Find in store
             </button>
           </div>
         </div>
