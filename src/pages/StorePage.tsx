@@ -31,7 +31,8 @@ export default function StorePage() {
     },
     {
       label: "Hours",
-      value: "Mon – Sat  07:00 – 21:00\nSunday  08:00 – 20:00",
+      value:
+        "Mon till sat\nOpen from 8 am till 8:45 pm\nSun from 9 am till 7:45 pm",
       icon: "◷",
     },
     {
